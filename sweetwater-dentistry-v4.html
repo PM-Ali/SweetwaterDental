@@ -1,0 +1,1231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sweetwater Dentistry</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    /* ── DESIGN TOKENS ───────────────────────────── */
+    :root {
+      /* Brand */
+      --teal:        #2EC4BB;
+      --teal-dark:   #1FADA5;
+      --teal-light:  #EAF9F8;
+      --peach:       #F4956A;
+
+      /* Neutral */
+      --bg-primary:    #ffffff;
+      --bg-secondary:  #F2FAFA;
+      --text-primary:  #1C2F2D;
+      --text-muted:    #6B8A87;
+      --border:        #D8EEEC;
+
+      /* Spacing (8pt base) */
+      --space-1: 4px;   --space-2: 8px;   --space-3: 12px;
+      --space-4: 16px;  --space-5: 20px;  --space-6: 24px;
+      --space-8: 32px;  --space-10: 40px; --space-12: 48px;
+      --space-16: 64px; --space-20: 80px; --space-24: 96px;
+
+      /* Border radius */
+      --radius-sm:   4px;
+      --radius-md:   8px;
+      --radius-lg:   16px;
+      --radius-xl:   24px;
+      --radius-full: 9999px;
+
+      /* Shadows */
+      --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+      --shadow-md: 0 4px 6px rgba(0,0,0,0.07), 0 2px 4px rgba(0,0,0,0.06);
+      --shadow-lg: 0 10px 15px rgba(0,0,0,0.08), 0 4px 6px rgba(0,0,0,0.05);
+      --shadow-xl: 0 20px 25px rgba(0,0,0,0.10), 0 10px 10px rgba(0,0,0,0.04);
+
+      /* Transitions */
+      --t-fast: 150ms ease;
+      --t-base: 200ms ease;
+      --t-slow: 300ms ease;
+
+      /* Z-index */
+      --z-raised:   10;
+      --z-sticky:   200;
+
+      /* Typography */
+      --text-sm:   0.875rem;
+      --text-base: 1rem;
+      --text-lg:   1.125rem;
+      --text-xl:   1.25rem;
+      --text-2xl:  1.5rem;
+      --text-3xl:  1.875rem;
+      --text-4xl:  2.25rem;
+      --text-5xl:  3rem;
+    }
+
+    /* ── DARK MODE ───────────────────────────────── */
+    /* dark mode disabled for v3 light theme */
+
+    /* ── BASE ────────────────────────────────────── */
+    html { scroll-behavior: smooth; color-scheme: light; }
+
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      font-size: var(--text-base);
+      color: var(--text-primary);
+      background: var(--bg-primary);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── FOCUS STYLES (Accessibility) ────────────── */
+    :focus-visible {
+      outline: 2px solid var(--teal);
+      outline-offset: 3px;
+      border-radius: var(--radius-sm);
+    }
+
+    /* ── MAX-WIDTH CONTAINER ─────────────────────── */
+    .container {
+      max-width: 1280px;
+      margin: 0 auto;
+    }
+
+    /* ── SCROLL ANIMATIONS ───────────────────────── */
+    .fade-up {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+    .fade-up.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .fade-up:nth-child(2) { transition-delay: 100ms; }
+    .fade-up:nth-child(3) { transition-delay: 200ms; }
+    .fade-up:nth-child(4) { transition-delay: 300ms; }
+    .fade-up:nth-child(5) { transition-delay: 400ms; }
+    .fade-up:nth-child(6) { transition-delay: 500ms; }
+
+    @media (prefers-reduced-motion: reduce) {
+      .fade-up { opacity: 1; transform: none; transition: none; }
+      html { scroll-behavior: auto; }
+    }
+
+    /* ── NAV ─────────────────────────────────────── */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: var(--z-sticky);
+      background: rgba(255,255,255,0.75);
+      -webkit-backdrop-filter: blur(16px);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(255,255,255,0.3);
+      box-shadow: 0 1px 0 rgba(216,238,236,0.6);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 var(--space-20);
+      height: 68px;
+      transition: background var(--t-base), box-shadow var(--t-base);
+    }
+
+    nav.scrolled {
+      background: rgba(255,255,255,0.92);
+      box-shadow: var(--shadow-md);
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      text-decoration: none;
+    }
+
+    .logo-icon {
+      width: 38px;
+      height: 38px;
+      background: var(--teal);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      flex-shrink: 0;
+    }
+
+    .logo-text {
+      font-size: var(--text-xl);
+      font-weight: 700;
+      color: var(--teal);
+      letter-spacing: -0.3px;
+    }
+
+    .logo-text span { color: var(--peach); }
+
+    .nav-links {
+      list-style: none;
+      display: flex;
+      gap: var(--space-8);
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: var(--text-muted);
+      font-size: var(--text-sm);
+      font-weight: 500;
+      transition: color var(--t-fast);
+    }
+
+    .nav-links a:hover { color: var(--teal); }
+
+    /* ── BUTTONS ─────────────────────────────────── */
+    .btn {
+      display: inline-block;
+      padding: 11px 22px;
+      border-radius: var(--radius-md);
+      font-weight: 600;
+      font-size: var(--text-sm);
+      cursor: pointer;
+      text-decoration: none;
+      transition: background var(--t-fast), color var(--t-fast), border-color var(--t-fast),
+                  transform var(--t-fast), box-shadow var(--t-fast);
+      border: 1.5px solid transparent;
+    }
+
+    .btn-primary {
+      background: var(--teal);
+      color: #ffffff;
+      border-color: var(--teal);
+    }
+
+    .btn-primary:hover {
+      background: var(--teal-dark);
+      border-color: var(--teal-dark);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(42, 157, 143, 0.3);
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--teal);
+      border-color: var(--border);
+    }
+
+    .btn-outline:hover {
+      border-color: var(--teal);
+      color: var(--teal);
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-sm);
+    }
+
+    /* ── HAMBURGER ───────────────────────────────── */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: var(--space-2);
+      border-radius: var(--radius-sm);
+    }
+
+    .hamburger span {
+      display: block;
+      width: 22px;
+      height: 2px;
+      background: #1C2F2D;
+      border-radius: 2px;
+      transition: transform var(--t-base), opacity var(--t-fast);
+    }
+
+    .hamburger[aria-expanded="true"] span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .hamburger[aria-expanded="true"] span:nth-child(2) { opacity: 0; }
+    .hamburger[aria-expanded="true"] span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    .mobile-menu {
+      display: none;
+      position: fixed;
+      inset: 68px 0 0 0;
+      background: var(--bg-primary);
+      padding: var(--space-8) var(--space-20);
+      z-index: calc(var(--z-sticky) - 1);
+      border-top: 1px solid var(--border);
+      flex-direction: column;
+      gap: var(--space-4);
+    }
+
+    .mobile-menu.open { display: flex; }
+
+    .mobile-menu a {
+      display: block;
+      padding: var(--space-3) 0;
+      font-size: var(--text-lg);
+      font-weight: 500;
+      color: var(--text-primary);
+      text-decoration: none;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .mobile-menu a:hover { color: var(--teal); }
+
+    .mobile-menu .btn {
+      width: 100%;
+      text-align: center;
+      margin-top: var(--space-4);
+    }
+
+    /* ── HERO ────────────────────────────────────── */
+    .hero {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-10);
+      padding: var(--space-24) var(--space-20);
+      background: linear-gradient(135deg, var(--teal-light) 0%, var(--bg-primary) 60%);
+      min-height: 88vh;
+    }
+
+    .hero-content { max-width: 560px; }
+
+    .hero-badge {
+      display: inline-block;
+      background: var(--teal-light);
+      border: 1px solid var(--teal);
+      color: var(--teal);
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 4px 14px;
+      border-radius: var(--radius-full);
+      margin-bottom: var(--space-5);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .hero h1 {
+      font-size: clamp(2.25rem, 5vw, 3.75rem);
+      font-weight: 800;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      margin-bottom: var(--space-5);
+      color: var(--text-primary);
+    }
+
+    .hero h1 span { color: var(--teal); }
+
+    .hero p {
+      font-size: var(--text-lg);
+      color: var(--text-muted);
+      margin-bottom: var(--space-8);
+      max-width: 480px;
+      line-height: 1.65;
+    }
+
+    .hero-actions { display: flex; gap: var(--space-3); flex-wrap: wrap; }
+
+    .hero-visual {
+      flex-shrink: 0;
+      width: min(420px, 45vw);
+      aspect-ratio: 1;
+      background: var(--teal);
+      border-radius: 40% 60% 55% 45% / 45% 40% 60% 55%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: clamp(80px, 12vw, 140px);
+      box-shadow: 0 20px 60px rgba(42, 157, 143, 0.3);
+      animation: morph 8s ease-in-out infinite;
+    }
+
+    @keyframes morph {
+      0%, 100% { border-radius: 40% 60% 55% 45% / 45% 40% 60% 55%; }
+      50%       { border-radius: 55% 45% 40% 60% / 60% 55% 45% 40%; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .hero-visual { animation: none; border-radius: 50%; }
+    }
+
+    .stats {
+      display: flex;
+      gap: var(--space-8);
+      margin-top: var(--space-12);
+      flex-wrap: wrap;
+    }
+
+    .stat strong {
+      display: block;
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: var(--teal);
+      letter-spacing: -0.02em;
+    }
+
+    .stat span { font-size: var(--text-sm); color: var(--text-muted); }
+
+    /* ── SECTION COMMON ──────────────────────────── */
+    section { padding: var(--space-20) var(--space-20); }
+
+    .section-label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--teal);
+      margin-bottom: var(--space-2);
+    }
+
+    .section-title {
+      font-size: clamp(1.875rem, 3.5vw, 2.5rem);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin-bottom: var(--space-3);
+      color: var(--text-primary);
+    }
+
+    .section-sub {
+      color: var(--text-muted);
+      font-size: var(--text-base);
+      max-width: 560px;
+      margin-bottom: var(--space-12);
+      line-height: 1.65;
+    }
+
+    /* ── SERVICES ────────────────────────────────── */
+    #services { background: var(--bg-secondary); }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: var(--space-6);
+    }
+
+    .service-card {
+      background: var(--bg-primary);
+      border-radius: var(--radius-lg);
+      padding: var(--space-8) var(--space-6);
+      box-shadow: var(--shadow-sm);
+      border: 2px solid transparent;
+      background-image: linear-gradient(var(--bg-primary), var(--bg-primary)),
+                        linear-gradient(135deg, var(--teal), var(--peach));
+      background-origin: border-box;
+      background-clip: padding-box, border-box;
+      transition: transform var(--t-base), box-shadow var(--t-base);
+    }
+
+    .service-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-lg), inset 0 0 24px rgba(46,196,187,0.07);
+    }
+
+    .service-icon {
+      margin-bottom: var(--space-4);
+    }
+
+    .service-icon svg {
+      width: 32px;
+      height: 32px;
+      stroke: var(--teal);
+      fill: none;
+      stroke-width: 1.75;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .service-card h3 {
+      font-size: var(--text-lg);
+      font-weight: 700;
+      margin-bottom: var(--space-2);
+      color: var(--text-primary);
+    }
+
+    .service-card p {
+      font-size: var(--text-base);
+      color: var(--text-muted);
+      line-height: 1.65;
+    }
+
+    /* ── WHY US ──────────────────────────────────── */
+    #why-us { background: var(--bg-primary); }
+
+    .why-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.2fr;
+      gap: var(--space-16);
+      align-items: center;
+    }
+
+    .why-img {
+      background: linear-gradient(135deg, var(--teal), var(--teal-dark));
+      border-radius: var(--radius-xl);
+      aspect-ratio: 4/3;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 100px;
+      box-shadow: var(--shadow-xl);
+    }
+
+    .why-list { list-style: none; display: flex; flex-direction: column; gap: var(--space-5); }
+
+    .why-list li {
+      display: flex;
+      gap: var(--space-4);
+      align-items: flex-start;
+    }
+
+    .check {
+      width: 28px;
+      height: 28px;
+      background: var(--teal-light);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--teal);
+      font-size: 0.85rem;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .why-list h4 { font-size: var(--text-base); font-weight: 700; margin-bottom: var(--space-1); color: var(--text-primary); }
+    .why-list p  { font-size: var(--text-base); color: var(--text-muted); line-height: 1.65; }
+
+    /* ── TESTIMONIALS ────────────────────────────── */
+    #testimonials { background: var(--teal-light); color: var(--text-primary); }
+
+    #testimonials .section-title { color: var(--text-primary); }
+    #testimonials .section-sub   { color: var(--text-muted); }
+    #testimonials .section-label { color: var(--teal); }
+
+    .testimonials-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: var(--space-6);
+    }
+
+    .testimonial-card {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: var(--space-6) var(--space-6);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .stars { color: var(--peach); font-size: var(--text-base); margin-bottom: var(--space-3); }
+
+    .testimonial-card p {
+      font-size: var(--text-base);
+      line-height: 1.7;
+      margin-bottom: var(--space-5);
+      color: var(--text-muted);
+    }
+
+    .reviewer { display: flex; align-items: center; gap: var(--space-3); }
+
+    .avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: var(--text-sm);
+      color: var(--teal);
+      flex-shrink: 0;
+    }
+
+    .reviewer-name  { font-weight: 700; font-size: var(--text-sm); }
+    .reviewer-title { font-size: 0.8rem; color: var(--text-muted); }
+
+    /* ── CONTACT ─────────────────────────────────── */
+    #contact { background: var(--bg-secondary); }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.4fr;
+      gap: var(--space-12);
+      align-items: start;
+    }
+
+    .contact-info { display: flex; flex-direction: column; gap: var(--space-6); }
+
+    .info-card { display: flex; gap: var(--space-4); align-items: flex-start; }
+
+    .info-icon {
+      width: 44px;
+      height: 44px;
+      background: var(--teal-light);
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      flex-shrink: 0;
+    }
+
+    .info-card h4 { font-size: var(--text-sm); font-weight: 700; margin-bottom: var(--space-1); color: var(--text-primary); }
+    .info-card p  { font-size: var(--text-sm); color: var(--text-muted); line-height: 1.65; }
+
+    .contact-form {
+      background: var(--bg-primary);
+      border-radius: var(--radius-lg);
+      padding: var(--space-10);
+      box-shadow: var(--shadow-md);
+      border: 1px solid var(--border);
+    }
+
+    .contact-form h3 { font-size: var(--text-xl); font-weight: 700; margin-bottom: var(--space-6); color: var(--text-primary); }
+
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-4); }
+
+    .form-group { margin-bottom: var(--space-4); }
+
+    .form-group label {
+      display: block;
+      font-size: var(--text-sm);
+      font-weight: 600;
+      margin-bottom: var(--space-1);
+      color: var(--text-primary);
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      height: 44px;
+      padding: 0 var(--space-3);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-md);
+      font-size: var(--text-base);
+      font-family: inherit;
+      color: var(--text-primary);
+      background: var(--bg-secondary);
+      transition: border-color var(--t-fast), background var(--t-fast);
+      outline: none;
+    }
+
+    .form-group textarea {
+      height: auto;
+      padding: var(--space-3);
+      resize: vertical;
+      min-height: 100px;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      border-color: var(--teal);
+      background: var(--bg-primary);
+      box-shadow: 0 0 0 3px rgba(42, 157, 143, 0.12);
+    }
+
+    .form-submit { width: 100%; height: 48px; font-size: var(--text-base); border: none; }
+
+    /* ── MEET THE DOCTOR ─────────────────────────── */
+    #doctor { background: var(--bg-primary); }
+
+    .doctor-grid {
+      display: grid;
+      grid-template-columns: 320px 1fr;
+      gap: var(--space-16);
+      align-items: start;
+    }
+
+    .doctor-card {
+      background: var(--teal-light);
+      border-radius: var(--radius-xl);
+      padding: var(--space-10) var(--space-8);
+      text-align: center;
+      position: sticky;
+      top: 88px;
+      border: 1px solid var(--border);
+    }
+
+    .doctor-avatar {
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      overflow: hidden;
+      margin: 0 auto var(--space-5);
+      box-shadow: 0 8px 24px rgba(42,157,143,0.3);
+      border: 4px solid var(--bg-primary);
+    }
+
+    .doctor-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: top center;
+    }
+
+    .doctor-card h3 {
+      font-size: var(--text-xl);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: var(--text-primary);
+      margin-bottom: var(--space-1);
+    }
+
+    .doctor-card .doctor-title {
+      font-size: var(--text-sm);
+      color: var(--teal);
+      font-weight: 600;
+      margin-bottom: var(--space-5);
+    }
+
+    .doctor-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-2);
+      justify-content: center;
+      margin-bottom: var(--space-5);
+    }
+
+    .doctor-tag {
+      background: var(--bg-primary);
+      color: var(--teal-dark);
+      border: 1px solid var(--teal);
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 3px 12px;
+      border-radius: var(--radius-full);
+    }
+
+    .doctor-langs { font-size: var(--text-sm); color: var(--text-muted); margin-top: var(--space-2); }
+    .doctor-langs strong { color: var(--text-primary); }
+
+    .doctor-bio { display: flex; flex-direction: column; gap: var(--space-8); }
+
+    .bio-block h4 {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--teal);
+      margin-bottom: var(--space-3);
+    }
+
+    .bio-block p { font-size: var(--text-base); color: var(--text-muted); line-height: 1.75; }
+
+    .bio-list { list-style: none; display: flex; flex-direction: column; gap: var(--space-3); }
+
+    .bio-list li {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+      font-size: var(--text-base);
+      color: var(--text-muted);
+    }
+
+    .bio-list li::before {
+      content: '';
+      width: 8px;
+      height: 8px;
+      background: var(--teal);
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .doctor-divider { height: 1px; background: var(--border); }
+
+    /* ── FOOTER ──────────────────────────────────── */
+    footer {
+      background: var(--teal);
+      color: rgba(255,255,255,0.80);
+      text-align: center;
+      padding: var(--space-8) var(--space-20);
+      font-size: var(--text-sm);
+    }
+
+    footer strong { color: #ffffff; }
+
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: var(--space-6);
+      margin-bottom: var(--space-3);
+    }
+
+    .footer-links a {
+      color: rgba(255,255,255,0.75);
+      text-decoration: none;
+      font-size: var(--text-sm);
+      transition: color var(--t-fast);
+    }
+
+    .footer-links a:hover { color: #ffffff; }
+
+    /* ── RESPONSIVE ──────────────────────────────── */
+    @media (max-width: 768px) {
+      nav { padding: 0 var(--space-5); }
+      .nav-links { display: none; }
+      .nav-cta   { display: none; }
+      .hamburger { display: flex; }
+
+      .hero {
+        flex-direction: column;
+        text-align: center;
+        padding: var(--space-12) var(--space-5);
+        min-height: auto;
+      }
+      .hero-visual   { width: min(280px, 80vw); }
+      .hero-actions  { justify-content: center; }
+      .stats         { justify-content: center; }
+      .hero p        { margin-left: auto; margin-right: auto; }
+
+      section { padding: var(--space-12) var(--space-5); }
+
+      .why-grid,
+      .contact-grid,
+      .doctor-grid  { grid-template-columns: 1fr; }
+      .form-row     { grid-template-columns: 1fr; }
+      .doctor-card  { position: static; }
+
+      footer { padding: var(--space-8) var(--space-5); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav id="main-nav">
+    <a class="logo" href="#" aria-label="Sweetwater Dentistry — home">
+      <div class="logo-icon" aria-hidden="true"><img src="./tooth with happy face Modern with sharp lines and.png" alt="" style="width:26px;height:26px;object-fit:contain;"/></div>
+      <span class="logo-text">Sweetwater <span>Dentistry</span></span>
+    </a>
+    <ul class="nav-links" role="list">
+      <li><a href="#services">Services</a></li>
+      <li><a href="#why-us">About</a></li>
+      <li><a href="#doctor">Our Doctor</a></li>
+      <li><a href="#testimonials">Reviews</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <a class="btn btn-primary nav-cta" href="#contact">Book Appointment</a>
+    <button class="hamburger" aria-label="Toggle menu" aria-expanded="false" aria-controls="mobile-menu">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <!-- MOBILE MENU -->
+  <div id="mobile-menu" class="mobile-menu" role="navigation" aria-label="Mobile navigation">
+    <a href="#services"     onclick="closeMobileMenu()">Services</a>
+    <a href="#why-us"       onclick="closeMobileMenu()">About</a>
+    <a href="#doctor"       onclick="closeMobileMenu()">Our Doctor</a>
+    <a href="#testimonials" onclick="closeMobileMenu()">Reviews</a>
+    <a href="#contact"      onclick="closeMobileMenu()">Contact</a>
+    <a class="btn btn-primary" href="#contact" onclick="closeMobileMenu()">Book Appointment</a>
+  </div>
+
+  <main>
+
+    <!-- HERO -->
+    <section class="hero" aria-label="Welcome">
+      <div class="hero-content">
+        <div class="hero-badge">Accepting New Patients</div>
+        <h1>Your Smile Deserves <span>Sweet</span> Care</h1>
+        <p>At Sweetwater Dentistry, we combine gentle touch with modern technology to give you a healthy, confident smile you'll love showing off.</p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="#contact">Book Appointment</a>
+          <a class="btn btn-outline" href="#services">Our Services</a>
+        </div>
+        <div class="stats" aria-label="Practice highlights">
+          <div class="stat"><strong data-counter="2400" data-suffix="+">2,400+</strong><span>Happy Patients</span></div>
+          <div class="stat"><strong data-counter="15" data-suffix="+">15+</strong><span>Years of Experience</span></div>
+          <div class="stat"><strong data-counter="4.9" data-decimals="1">4.9</strong><span>Star Rating</span></div>
+        </div>
+      </div>
+      <div class="hero-visual" aria-hidden="true"><img src="./tooth with happy face Modern with sharp lines and.png" alt="" style="width:65%;height:65%;object-fit:contain;mix-blend-mode:multiply;"/></div>
+    </section>
+
+    <!-- SERVICES -->
+    <section id="services" aria-labelledby="services-heading">
+      <div class="section-label">What We Offer</div>
+      <h2 id="services-heading" class="section-title">Comprehensive Dental Services</h2>
+      <p class="section-sub">From routine cleanings to full smile makeovers, we provide everything your family needs under one roof.</p>
+      <div class="services-grid">
+        <div class="service-card fade-up">
+          <div class="service-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 2C9 2 6 4 6 7c0 4 2 7 3 9 .5 1 1.5 2 3 2s2.5-1 3-2c1-2 3-5 3-9 0-3-3-5-6-5z"/></svg></div>
+          <h3>Preventive Care</h3>
+          <p>Regular cleanings, exams, and X-rays to keep your teeth and gums healthy before problems start.</p>
+        </div>
+        <div class="service-card fade-up">
+          <div class="service-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+          <h3>Teeth Whitening</h3>
+          <p>Professional in-office whitening that delivers dramatic, lasting results in just one visit.</p>
+        </div>
+        <div class="service-card fade-up">
+          <div class="service-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 13s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg></div>
+          <h3>Cosmetic Dentistry</h3>
+          <p>Veneers, bonding, and smile makeovers tailored to create the smile you've always wanted.</p>
+        </div>
+        <div class="service-card fade-up">
+          <div class="service-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="2" y="9" width="20" height="6" rx="3"/><line x1="6" y1="9" x2="6" y2="15"/><line x1="10" y1="9" x2="10" y2="15"/><line x1="14" y1="9" x2="14" y2="15"/><line x1="18" y1="9" x2="18" y2="15"/></svg></div>
+          <h3>Orthodontics</h3>
+          <p>Clear aligners and traditional braces for children, teens, and adults of all ages.</p>
+        </div>
+        <div class="service-card fade-up">
+          <div class="service-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><line x1="12" y1="2" x2="12" y2="14"/><path d="M8 6h8M9 10h6"/><path d="M9 14c0 3 1.5 5 3 5s3-2 3-5"/></svg></div>
+          <h3>Dental Implants</h3>
+          <p>Permanent, natural-looking tooth replacements that restore your ability to eat and speak with confidence.</p>
+        </div>
+        <div class="service-card fade-up">
+          <div class="service-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+          <h3>Family Dentistry</h3>
+          <p>Kid-friendly care in a welcoming environment so the whole family feels comfortable and at ease.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- WHY US -->
+    <section id="why-us" aria-labelledby="why-us-heading">
+      <div class="why-grid">
+        <div class="why-img fade-up" aria-hidden="true">&#128512;</div>
+        <div>
+          <div class="section-label">Why Choose Us</div>
+          <h2 id="why-us-heading" class="section-title">Dentistry That Puts You First</h2>
+          <p class="section-sub">We know dental visits can feel stressful. That's why everything we do is designed around your comfort and trust.</p>
+          <ul class="why-list">
+            <li class="fade-up">
+              <div class="check" aria-hidden="true">&#10003;</div>
+              <div>
+                <h4>Gentle, Judgment-Free Care</h4>
+                <p>No lectures, no pressure. We meet you where you are and help you move forward at your pace.</p>
+              </div>
+            </li>
+            <li class="fade-up">
+              <div class="check" aria-hidden="true">&#10003;</div>
+              <div>
+                <h4>State-of-the-Art Technology</h4>
+                <p>Digital X-rays, 3D imaging, and same-day crowns mean faster, more accurate, and more comfortable treatment.</p>
+              </div>
+            </li>
+            <li class="fade-up">
+              <div class="check" aria-hidden="true">&#10003;</div>
+              <div>
+                <h4>Flexible Scheduling</h4>
+                <p>Early morning and evening appointments available so dental care fits your busy life.</p>
+              </div>
+            </li>
+            <li class="fade-up">
+              <div class="check" aria-hidden="true">&#10003;</div>
+              <div>
+                <h4>Transparent Pricing</h4>
+                <p>We accept most major insurance plans and offer financing options with no hidden fees.</p>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- MEET THE DOCTOR -->
+    <section id="doctor" aria-labelledby="doctor-heading">
+      <div class="section-label">Meet Your Dentist</div>
+      <h2 id="doctor-heading" class="section-title">Dr. Asmah Mian, DDS</h2>
+      <p class="section-sub">Compassionate, skilled, and dedicated to making every visit a positive experience for the whole family.</p>
+      <div class="doctor-grid">
+        <div class="doctor-card fade-up">
+          <div class="doctor-avatar">
+            <img src="https://baycollegedentalcenter.com/wp-content/uploads/2020/07/Dr.-Asmah-Mian_small.jpg"
+                 alt="Dr. Asmah Mian, DDS — Sweetwater Dentistry"
+                 loading="lazy"
+                 width="150" height="150" />
+          </div>
+          <h3>Dr. Asmah Mian</h3>
+          <div class="doctor-title">Doctor of Dental Surgery (DDS)</div>
+          <div class="doctor-tags">
+            <span class="doctor-tag">Family Dentistry</span>
+            <span class="doctor-tag">Cosmetic</span>
+            <span class="doctor-tag">Preventive Care</span>
+            <span class="doctor-tag">Orthodontics</span>
+          </div>
+          <div class="doctor-langs"><strong>Languages:</strong> English &amp; Urdu</div>
+        </div>
+
+        <div class="doctor-bio">
+          <div class="bio-block fade-up">
+            <h4>About Dr. Mian</h4>
+            <p>Dr. Asmah Mian brings warmth, expertise, and a genuine passion for patient well-being to every appointment. Her main goal is to provide dental care in a comforting and gentle manner, ensuring that each patient feels at ease from the moment they walk through the door. She believes that a strong patient relationship is the foundation of achieving optimal oral health.</p>
+          </div>
+          <div class="doctor-divider"></div>
+          <div class="bio-block fade-up">
+            <h4>Education</h4>
+            <ul class="bio-list">
+              <li>Doctor of Dental Surgery (DDS) — Faculty of Dentistry, University of Toronto (2011)</li>
+            </ul>
+          </div>
+          <div class="doctor-divider"></div>
+          <div class="bio-block fade-up">
+            <h4>Professional Memberships</h4>
+            <ul class="bio-list">
+              <li>Canadian Dental Association (CDA)</li>
+              <li>Ontario Dental Association (ODA)</li>
+              <li>Academy of General Dentistry</li>
+            </ul>
+          </div>
+          <div class="doctor-divider"></div>
+          <div class="bio-block fade-up">
+            <h4>Continuing Education</h4>
+            <p>Dr. Mian regularly attends advanced dental education courses to stay at the forefront of modern techniques and technology, ensuring her patients always receive the highest standard of care.</p>
+          </div>
+          <div class="doctor-divider"></div>
+          <div class="bio-block fade-up">
+            <h4>Beyond the Office</h4>
+            <p>When she's not caring for her patients, Dr. Mian enjoys exploring new cultures through international travel and spending time in the great outdoors.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TESTIMONIALS -->
+    <section id="testimonials" aria-labelledby="testimonials-heading">
+      <div class="section-label">Patient Reviews</div>
+      <h2 id="testimonials-heading" class="section-title">What Our Patients Say</h2>
+      <p class="section-sub">Real stories from the Sweetwater community we're proud to serve.</p>
+      <div class="testimonials-grid">
+        <div class="testimonial-card fade-up">
+          <div class="stars" aria-label="5 out of 5 stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+          <p>"I used to dread the dentist, but Sweetwater Dentistry completely changed that. The staff is so warm and the office is beautiful. I actually look forward to my appointments now!"</p>
+          <div class="reviewer">
+            <div class="avatar" style="background:#fde68a;" aria-hidden="true">JM</div>
+            <div>
+              <div class="reviewer-name">Jessica M.</div>
+              <div class="reviewer-title">Patient since 2021</div>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-card fade-up">
+          <div class="stars" aria-label="5 out of 5 stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+          <p>"Got my implant done here and it was seamless. Dr. Mian and the team walked me through every step. My new tooth looks and feels completely natural. Highly recommend!"</p>
+          <div class="reviewer">
+            <div class="avatar" style="background:#a7f3d0;" aria-hidden="true">TR</div>
+            <div>
+              <div class="reviewer-name">Tom R.</div>
+              <div class="reviewer-title">Patient since 2020</div>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-card fade-up">
+          <div class="stars" aria-label="5 out of 5 stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+          <p>"Best dental office in town! My kids used to be scared of the dentist but they actually ask when we're going back. The whitening results I got were absolutely stunning too."</p>
+          <div class="reviewer">
+            <div class="avatar" style="background:#c7d2fe;" aria-hidden="true">SL</div>
+            <div>
+              <div class="reviewer-name">Sara L.</div>
+              <div class="reviewer-title">Patient since 2019</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact" aria-labelledby="contact-heading">
+      <div class="section-label">Get in Touch</div>
+      <h2 id="contact-heading" class="section-title">Book Your Appointment</h2>
+      <p class="section-sub">Ready for a healthier, brighter smile? Reach out and we'll get you scheduled right away.</p>
+      <div class="contact-grid">
+        <div class="contact-info fade-up">
+          <div class="info-card">
+            <div class="info-icon" aria-hidden="true">&#128205;</div>
+            <div>
+              <h4>Our Location</h4>
+              <p>123 Sweetwater Blvd, Suite 200<br>Oakville, Ontario L6J 1H1</p>
+            </div>
+          </div>
+          <div class="info-card">
+            <div class="info-icon" aria-hidden="true">&#128222;</div>
+            <div>
+              <h4>Phone</h4>
+              <p><a href="tel:+15125550192" style="color:var(--teal);text-decoration:none;">(512) 555-0192</a></p>
+            </div>
+          </div>
+          <div class="info-card">
+            <div class="info-icon" aria-hidden="true">&#128140;</div>
+            <div>
+              <h4>Email</h4>
+              <p><a href="mailto:hello@sweetwaterdentistry.com" style="color:var(--teal);text-decoration:none;">hello@sweetwaterdentistry.com</a></p>
+            </div>
+          </div>
+          <div class="info-card">
+            <div class="info-icon" aria-hidden="true">&#128337;</div>
+            <div>
+              <h4>Office Hours</h4>
+              <p>Mon – Thu: 8am – 6pm<br>Fri: 8am – 4pm<br>Sat: 9am – 2pm</p>
+            </div>
+          </div>
+        </div>
+
+        <form class="contact-form fade-up" onsubmit="handleSubmit(event)" novalidate>
+          <h3>Request an Appointment</h3>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="fname">First Name</label>
+              <input type="text" id="fname" name="fname" placeholder="Jane" autocomplete="given-name" required />
+            </div>
+            <div class="form-group">
+              <label for="lname">Last Name</label>
+              <input type="text" id="lname" name="lname" placeholder="Doe" autocomplete="family-name" required />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="email">Email</label>
+              <input type="email" id="email" name="email" placeholder="jane@email.com" autocomplete="email" required />
+            </div>
+            <div class="form-group">
+              <label for="phone">Phone</label>
+              <input type="tel" id="phone" name="phone" placeholder="(512) 555-0000" autocomplete="tel" />
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="service">Service Needed</label>
+            <select id="service" name="service">
+              <option value="">Select a service...</option>
+              <option>Preventive Cleaning &amp; Exam</option>
+              <option>Teeth Whitening</option>
+              <option>Cosmetic Dentistry</option>
+              <option>Orthodontics / Aligners</option>
+              <option>Dental Implants</option>
+              <option>Emergency Visit</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="message">Message <span style="font-weight:400;color:var(--text-muted)">(optional)</span></label>
+            <textarea id="message" name="message" placeholder="Any questions or details we should know..."></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary form-submit">Send Request</button>
+        </form>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- MAP -->
+  <section id="map" style="padding:0; margin:0;">
+    <div style="
+      background: var(--bg-secondary);
+      padding: var(--space-12) var(--space-20) 0;
+      text-align: center;
+    ">
+      <div style="font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--teal);margin-bottom:var(--space-2);">Find Us</div>
+      <h2 style="font-size:clamp(1.5rem,3vw,2rem);font-weight:800;letter-spacing:-0.02em;color:var(--text-primary);margin-bottom:var(--space-2);">We're in Oakville, Ontario</h2>
+      <p style="color:var(--text-muted);font-size:1rem;margin-bottom:var(--space-6);">123 Sweetwater Blvd, Suite 200 · Oakville, ON L6J 1H1</p>
+    </div>
+    <div style="width:100%;height:420px;filter:saturate(0.85) contrast(1.05);">
+      <iframe
+        title="Sweetwater Dentistry Location — Oakville, Ontario"
+        src="https://maps.google.com/maps?q=Oakville,+Ontario,+Canada&t=m&z=13&output=embed&iwloc=near"
+        width="100%"
+        height="420"
+        style="border:0;display:block;"
+        allowfullscreen=""
+        loading="lazy"
+        referrerpolicy="no-referrer-when-downgrade">
+      </iframe>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-links">
+      <a href="#services">Services</a>
+      <a href="#why-us">About</a>
+      <a href="#testimonials">Reviews</a>
+      <a href="#contact">Contact</a>
+    </div>
+    <p>&copy; 2026 <strong>Sweetwater Dentistry</strong>. All rights reserved. &nbsp;|&nbsp; Proudly serving Oakville, Ontario.</p>
+  </footer>
+
+  <script>
+    // ── NAV: shadow on scroll ─────────────────────
+    const nav = document.getElementById('main-nav');
+    const navObserver = new IntersectionObserver(
+      ([e]) => nav.classList.toggle('scrolled', !e.isIntersecting),
+      { threshold: 0, rootMargin: '-68px 0px 0px 0px' }
+    );
+    // Observe a sentinel at the top of main
+    const sentinel = document.createElement('div');
+    document.body.prepend(sentinel);
+    navObserver.observe(sentinel);
+
+    // ── HAMBURGER MENU ────────────────────────────
+    const hamburger   = document.querySelector('.hamburger');
+    const mobileMenu  = document.getElementById('mobile-menu');
+
+    hamburger.addEventListener('click', () => {
+      const open = mobileMenu.classList.toggle('open');
+      hamburger.setAttribute('aria-expanded', open);
+      document.body.style.overflow = open ? 'hidden' : '';
+    });
+
+    function closeMobileMenu() {
+      mobileMenu.classList.remove('open');
+      hamburger.setAttribute('aria-expanded', 'false');
+      document.body.style.overflow = '';
+    }
+
+    // ── SCROLL ANIMATIONS ─────────────────────────
+    const fadeEls = document.querySelectorAll('.fade-up');
+    const fadeObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            fadeObserver.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.12 }
+    );
+    fadeEls.forEach(el => fadeObserver.observe(el));
+
+    // ── NUMBER COUNTERS ───────────────────────────
+    const counterEls = document.querySelectorAll('[data-counter]');
+    const counterObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        const el = entry.target;
+        const target = parseFloat(el.dataset.counter);
+        const suffix = el.dataset.suffix || '';
+        const decimals = parseInt(el.dataset.decimals || '0');
+        const duration = 1500;
+        const start = performance.now();
+        function tick(now) {
+          const elapsed = now - start;
+          const progress = Math.min(elapsed / duration, 1);
+          const ease = 1 - Math.pow(1 - progress, 3);
+          const value = (target * ease);
+          el.textContent = (decimals ? value.toFixed(decimals) : Math.floor(value).toLocaleString()) + suffix;
+          if (progress < 1) requestAnimationFrame(tick);
+          else el.textContent = (decimals ? target.toFixed(decimals) : target.toLocaleString()) + suffix;
+        }
+        requestAnimationFrame(tick);
+        counterObserver.unobserve(el);
+      });
+    }, { threshold: 0.5 });
+    counterEls.forEach(el => counterObserver.observe(el));
+
+    // ── FORM SUBMIT ───────────────────────────────
+    function handleSubmit(e) {
+      e.preventDefault();
+      const btn = e.target.querySelector('.form-submit');
+      btn.textContent = 'Request Sent!';
+      btn.style.background = '#21867a';
+      btn.disabled = true;
+      setTimeout(() => {
+        btn.textContent = 'Send Request';
+        btn.style.background = '';
+        btn.disabled = false;
+        e.target.reset();
+      }, 3000);
+    }
+  </script>
+
+</body>
+</html>
